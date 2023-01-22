@@ -3,6 +3,29 @@
 		<meta charset="utf-8">
 		<title>App Pesquisa Endereço</title>
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+		<script>
+			function getDadosEnderecoPorCep(cep){
+				let xmlRequest = new XMLHttpRequest;
+
+				let url = "https://viacep.com.br/ws/" + cep + "/json/"
+
+				xmlRequest.open("GET", url);
+
+				xmlRequest.onreadystatechange = () =>{
+					if(xmlRequest.readyState == 4 && xmlRequest.status == 200){
+						let xmlResponse = JSON.parse(xmlRequest.responseText);
+						console.log(xmlResponse);
+						document.getElementById("endereco").value = xmlResponse['logradouro'];
+						document.getElementById("bairro").value = xmlResponse['bairro'];
+						document.getElementById("cidade").value = xmlResponse['localidade'];
+						document.getElementById("uf").value = xmlResponse['uf'];
+					}
+				}
+
+				xmlRequest.send();
+			}
+		</script>
+
 	</head>
 	<body>
 		
@@ -17,23 +40,23 @@
 		<div class="container">
 			<div class="row form-group">
 				<div class="col-sm-3">
-					<input type="text" class="form-control" placeholder="CEP"/>
+					<input type="text" class="form-control" placeholder="CEP" onblur="getDadosEnderecoPorCep(this.value)"/>
 				</div>
 				<div class="col-sm-9">
-					<input type="text" class="form-control" placeholder="Endereço" readonly />
+					<input type="text" class="form-control" placeholder="Endereço" readonly id="endereco"/>
 				</div>
 			</div>
 
 			<div class="row form-group">
 				<div class="col-sm-6">
-					<input type="text" class="form-control" placeholder="Bairro" readonly />
+					<input type="text" class="form-control" placeholder="Bairro" readonly id="bairro"/>
 				</div>
 				<div class="col-sm-4">
-					<input type="text" class="form-control" placeholder="Cidade" readonly />
+					<input type="text" class="form-control" placeholder="Cidade" readonly id="cidade"/>
 				</div>
 
 				<div class="col-sm-2">
-					<input type="text" class="form-control" placeholder="UF" readonly />
+					<input type="text" class="form-control" placeholder="UF" readonly id="uf"/>
 				</div>
 			</div>
 		</div>
